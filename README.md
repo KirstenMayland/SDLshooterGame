@@ -5,3 +5,4 @@ https://www.parallelrealities.co.uk/tutorials/#rogue
 great tutorial bc it gives you mostly correct code and then you need to bring it all the way to completion,
 forcing you to actually understand it
 (got better at makefiles, typedef structs, general SDL, refresher on pointers, function pointers)
+so so many hours of debugging, trying to conceptualize it and get it to work

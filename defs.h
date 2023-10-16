@@ -1,7 +1,8 @@
 
-/**************** Dimensions ****************/
+/**************** General Specs ****************/
 #define SCREEN_WIDTH   1280
 #define SCREEN_HEIGHT  720
+#define FPS 60
 
 /**************** Player Specs ****************/
 #define PLAYER_SPEED    4
@@ -17,7 +18,8 @@
 #define BULLET_WIDTH    20
 #define BULLET_HEIGHT   20
 
-/**************** Bullet Specs ****************/
+/**************** Enemy Specs ****************/
+#define ENEMY_BULLET_SPEED    8
 #define ENEMY_WIDTH     50
 #define ENEMY_HEIGHT    50
 
