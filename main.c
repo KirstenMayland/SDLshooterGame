@@ -1,9 +1,10 @@
 #include "main.h"
 
-//TODO: include wasd, increase directions bullets can be shot from, free stage
+//TODO: include wasd, increase directions bullets can be shot from, free stage and app
 
 /**************** file-local global variables ****************/
-App app;
+App* app;
+// Stage stage;
 
 /**************** local functions ****************/
 void cleanup(void);
@@ -14,13 +15,14 @@ int main(int argc, char *argv[])
 	long then;
 	float remainder;
 
-	memset(&app, 0, sizeof(App));
+	app = malloc(sizeof(App));
+	memset(app, 0, sizeof(App));
 
-	initSDL(&app);
+	initSDL(app);
 
 	atexit(cleanup);
 
-	initStage(&app);
+	initStage(app);
 
 	then = SDL_GetTicks();
 
@@ -28,15 +30,15 @@ int main(int argc, char *argv[])
 
 	while (1)
 	{
-		prepareScene(&app);
+		prepareScene(app);
 
-		doInput(&app);
+		doInput(app);
 
-		app.delegate.logic();
+		app->delegate.logic();
 
-		app.delegate.draw();
+		app->delegate.draw();
 
-		presentScene(&app);
+		presentScene(app);
 
 		capFrameRate(&then, &remainder);
 	}
@@ -48,8 +50,10 @@ void cleanup(void)
 {
 	// clean up resources
 	// SDL_DestroyTexture(player.texture);
-    SDL_DestroyRenderer(app.renderer);
-    SDL_DestroyWindow(app.window);
+	// free(stage);
+    SDL_DestroyRenderer(app->renderer);
+    SDL_DestroyWindow(app->window);
+	free(app);
     SDL_Quit();
 
 	// delete malloced player

@@ -2,4 +2,4 @@
 #include "draw.h"
 
 /*init*/
-void initStage(App* app_p);
+void initStage(App* app_param);

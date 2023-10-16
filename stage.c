@@ -16,9 +16,10 @@ static void doBullets(void);
 static void drawPlayer(void);
 static void drawBullets(void);
 
-void initStage(App* app_p)
+void initStage(App* app_param)
 {
-    app = app_p;
+    app = app_param;
+
     Entity* fhead;
     Entity* bhead;
 
@@ -30,12 +31,14 @@ void initStage(App* app_p)
 
     fhead = &stage->fighterHead;
     bhead = &stage->bulletHead;
-	stage->fighterTail = fhead; // seg fault
-	stage->bulletTail = bhead; // seg fault
+	stage->fighterTail = fhead;
+	stage->bulletTail = bhead; 
 
 	initPlayer();
 
 	bulletTexture = loadTexture(BULLET_IMAGE, app);
+
+    // return stage, player;
 }
 
 static void initPlayer()
@@ -48,11 +51,16 @@ static void initPlayer()
 	player->x = PLAYER_X_START;
 	player->y = PLAYER_Y_START;
 	player->texture = loadTexture(PLAYER_IMAGE, app);
-	SDL_QueryTexture(player->texture, NULL, NULL, &player->w, &player->h);
+    int p_width = PLAYER_WIDTH;
+    int p_height = PLAYER_HEIGHT;
+	SDL_QueryTexture(player->texture, NULL, NULL, &p_width, &p_height);
+
+    // return player;
 }
 
 static void logic(void)
 {
+    printf("logic\n");
 	doPlayer();
 
 	doBullets();
@@ -110,7 +118,10 @@ static void fireBullet(void)
 	bullet->dx = PLAYER_BULLET_SPEED;
 	bullet->health = 1;
 	bullet->texture = bulletTexture;
-	SDL_QueryTexture(bullet->texture, NULL, NULL, &bullet->w, &bullet->h);
+    
+    int b_width = BULLET_WIDTH;
+    int b_height = BULLET_HEIGHT;
+	SDL_QueryTexture(bullet->texture, NULL, NULL, &b_width, &b_height);
 
 	bullet->y += (player->h / 2) - (bullet->h / 2);
 
@@ -146,6 +157,7 @@ static void doBullets(void)
 
 static void draw(void)
 {
+    printf("draw\n");
 	drawPlayer();
 
 	drawBullets();
