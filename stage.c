@@ -5,6 +5,8 @@ App* app;
 Stage* stage;
 Entity* player;
 SDL_Texture* bulletTexture;
+SDL_Texture* enemyTexture;
+int enemySpawnTimer;
 
 /**************** local functions ****************/
 static void initPlayer();
@@ -15,6 +17,9 @@ static void fireBullet(void);
 static void doBullets(void);
 static void drawPlayer(void);
 static void drawBullets(void);
+static void doFighters(void);
+static void spawnEnemies(void);
+static void drawFighters(void);
 
 void initStage(App* app_param)
 {
@@ -37,6 +42,9 @@ void initStage(App* app_param)
 	initPlayer();
 
 	bulletTexture = loadTexture(BULLET_IMAGE, app);
+    enemyTexture = loadTexture(ENEMY_IMAGE, app);
+
+	enemySpawnTimer = 0;
 
     // return stage, player;
 }
@@ -60,10 +68,13 @@ static void initPlayer()
 
 static void logic(void)
 {
-    printf("logic\n");
 	doPlayer();
 
+    doFighters();
+
 	doBullets();
+
+    spawnEnemies();
 }
 
 static void doPlayer(void)
@@ -155,11 +166,63 @@ static void doBullets(void)
 	}
 }
 
+static void doFighters(void)
+{
+	Entity *e, *prev;
+
+	prev = &stage->fighterHead;
+
+	for (e = stage->fighterHead.next ; e != NULL ; e = e->next)
+	{
+		e->x += e->dx;
+		e->y += e->dy;
+
+		if (e != player && e->x < -e->w)
+		{
+			if (e == stage->fighterTail)
+			{
+				stage->fighterTail = prev;
+			}
+
+			prev->next = e->next;
+			free(e);
+			e = prev;
+		}
+
+		prev = e;
+	}
+}
+
+static void spawnEnemies(void)
+{
+	Entity *enemy;
+
+	if (--enemySpawnTimer <= 0)
+	{
+		enemy = malloc(sizeof(Entity));
+		memset(enemy, 0, sizeof(Entity));
+		stage->fighterTail->next = enemy;
+		stage->fighterTail = enemy;
+
+		enemy->x = SCREEN_WIDTH;
+		enemy->y = rand() % SCREEN_HEIGHT;
+		enemy->texture = enemyTexture;
+		SDL_QueryTexture(enemy->texture, NULL, NULL, &enemy->w, &enemy->h);
+
+		enemy->dx = -(2 + (rand() % 4));
+
+		enemySpawnTimer = 30 + (rand() % 60);
+	}
+}
+
+
 static void draw(void)
 {
 	drawPlayer();
 
 	drawBullets();
+
+    drawFighters();
 }
 
 static void drawPlayer(void)
@@ -174,5 +237,15 @@ static void drawBullets(void)
 	for (b = stage->bulletHead.next ; b != NULL ; b = b->next)
 	{
 		blit(b->texture, b->x, b->y, BULLET_WIDTH, BULLET_HEIGHT, app);
+	}
+}
+
+static void drawFighters(void)
+{
+	Entity *e;
+
+	for (e = stage->fighterHead.next ; e != NULL ; e = e->next)
+	{
+		blit(e->texture, e->x, e->y, ENEMY_WIDTH, ENEMY_HEIGHT, app);
 	}
 }

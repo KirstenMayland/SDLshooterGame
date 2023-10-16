@@ -17,9 +17,14 @@
 #define BULLET_WIDTH    20
 #define BULLET_HEIGHT   20
 
+/**************** Bullet Specs ****************/
+#define ENEMY_WIDTH     50
+#define ENEMY_HEIGHT    50
+
 /**************** Graphics ****************/
 #define PLAYER_IMAGE    "images/bear.png"
 #define BULLET_IMAGE    "images/acorn.png"
+#define ENEMY_IMAGE     "images/rocket.jpg"
 
 /**************** Keys ****************/
 #define MAX_KEYBOARD_KEYS   350

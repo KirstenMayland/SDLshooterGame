@@ -4,7 +4,11 @@
 // include wasd
 // increase directions bullets can be shot from
 // have acorns be shot from the bear's paws
-// free stage
+// free stage and enemies
+// prevent bear from leaving screen
+
+// enemies move on y axis? (prevent them from leaving top and bottom of screen)
+// change spawn rate
 
 /**************** file-local global variables ****************/
 App* app;
