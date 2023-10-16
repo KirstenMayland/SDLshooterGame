@@ -12,6 +12,7 @@
 
 #define PLAYER_WIDTH    75
 #define PLAYER_HEIGHT   75
+#define SIDE_PLAYER 0
 
 /**************** Bullet Specs ****************/
 #define PLAYER_BULLET_SPEED   16
@@ -22,6 +23,7 @@
 #define ENEMY_BULLET_SPEED    8
 #define ENEMY_WIDTH     50
 #define ENEMY_HEIGHT    50
+#define SIDE_ENEMY  1
 
 /**************** Graphics ****************/
 #define PLAYER_IMAGE    "images/bear.png"

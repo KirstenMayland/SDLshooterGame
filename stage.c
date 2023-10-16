@@ -21,6 +21,7 @@ static void doPlayer(void);
 static void clipPlayer(void);
 static void fireBullet(void);
 static void doBullets(void);
+static int bulletHitFighter(Entity *b);
 static void doFighters(void);
 static void doEnemies(void);
 static void spawnEnemies(void);
@@ -75,11 +76,12 @@ static void initPlayer()
 
 	player->x = PLAYER_X_START;
 	player->y = PLAYER_Y_START;
-	player->texture = loadTexture(PLAYER_IMAGE, app);
+	player->texture = playerTexture;
     int p_width = PLAYER_WIDTH;
     int p_height = PLAYER_HEIGHT;
 	SDL_QueryTexture(player->texture, NULL, NULL, &p_width, &p_height);
 
+    player->side = SIDE_PLAYER;
     // return player;
 }
 
@@ -92,6 +94,8 @@ static void logic(void)
 	doBullets();
 
     spawnEnemies();
+
+    doEnemies();
 
     clipPlayer();
 
@@ -156,6 +160,7 @@ static void fireBullet(void)
 	bullet->dx = PLAYER_BULLET_SPEED;
 	bullet->health = 1;
 	bullet->texture = bulletTexture;
+    bullet->side = SIDE_PLAYER;
     
     int b_width = BULLET_WIDTH;
     int b_height = BULLET_HEIGHT;
@@ -192,6 +197,24 @@ static void doBullets(void)
 
 		prev = b;
 	}
+}
+
+static int bulletHitFighter(Entity *b)
+{
+	Entity *e;
+
+	for (e = stage->fighterHead.next ; e != NULL ; e = e->next)
+	{
+		if (e->side != b->side && collision(b->x, b->y, b->w, b->h, e->x, e->y, e->w, e->h))
+		{
+			b->health = 0;
+			e->health = 0;
+
+			return 1;
+		}
+	}
+
+	return 0;
 }
 
 static void doFighters(void)
@@ -244,7 +267,9 @@ static void spawnEnemies(void)
 
 		enemy->x = SCREEN_WIDTH;
 		enemy->y = rand() % SCREEN_HEIGHT;
-		enemy->texture = enemyTexture;
+        enemy->side = SIDE_ENEMY;
+        enemy->health = 1;
+        enemy->texture = enemyTexture;
 		SDL_QueryTexture(enemy->texture, NULL, NULL, &enemy->w, &enemy->h);
 
 		enemy->dx = -(2 + (rand() % 4));
@@ -281,7 +306,7 @@ static void fireAlienBullet(Entity *e)
 	bullet->y = e->y;
 	bullet->health = 1;
 	bullet->texture = enemyBulletTexture;
-	bullet->side = SIDE_ALIEN;
+	bullet->side = SIDE_ENEMY;
     bullet->w = BULLET_WIDTH;
     bullet->h = BULLET_HEIGHT;
 	SDL_QueryTexture(bullet->texture, NULL, NULL, &bullet->w, &bullet->h);
@@ -338,7 +363,10 @@ static void draw(void)
 
 static void drawPlayer(void)
 {
+    if (player != NULL) 
+    {
 	blit(player->texture, player->x, player->y, PLAYER_WIDTH, PLAYER_HEIGHT, app);
+    }
 }
 
 static void drawBullets(void)
