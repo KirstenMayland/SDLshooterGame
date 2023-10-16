@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include "defs.h"
 
 #pragma once
 typedef struct {
@@ -10,19 +11,27 @@ typedef struct {
 typedef struct {
 	SDL_Renderer *renderer;
 	SDL_Window *window;
-	int up;
-	int down;
-	int left;
-	int right;
-	int fire;
+	Delegate delegate;
+	int keyboard[MAX_KEYBOARD_KEYS];
 } App;
+
+
+#pragma once
+typedef struct Entity{
+	float x;
+	float y;
+	int w;
+	int h;
+	float dx;
+	float dy;
+	int health;
+	int reload;
+	SDL_Texture *texture;
+	struct Entity *next;
+} Entity;
 
 #pragma once
 typedef struct {
-	int x;
-	int y;
-	int dx;
-	int dy;
-	int health;
-	SDL_Texture *texture;
-} Entity;
+	Entity fighterHead, *fighterTail;
+	Entity bulletHead, *bulletTail;
+} Stage;
