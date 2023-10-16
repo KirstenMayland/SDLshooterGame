@@ -1,6 +1,10 @@
 #include "main.h"
 
-//TODO: include wasd, increase directions bullets can be shot from, free stage and app
+//TODO: 
+// include wasd
+// increase directions bullets can be shot from
+// have acorns be shot from the bear's paws
+// free stage
 
 /**************** file-local global variables ****************/
 App* app;

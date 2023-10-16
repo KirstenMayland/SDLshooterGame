@@ -157,7 +157,6 @@ static void doBullets(void)
 
 static void draw(void)
 {
-    printf("draw\n");
 	drawPlayer();
 
 	drawBullets();

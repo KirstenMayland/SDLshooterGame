@@ -2,8 +2,7 @@
 
 void prepareScene(App* app)
 {
-	printf("prepare\n");
-	SDL_SetRenderDrawColor(app->renderer, 255, 230, 167, 255);
+	SDL_SetRenderDrawColor(app->renderer, 187, 148, 87, 255);
 	SDL_RenderClear(app->renderer);
 }
 
@@ -35,8 +34,8 @@ void blit(SDL_Texture *texture, int x, int y, int w, int h, App* app)
 	// 	SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
 	// }
 	// else { // Manual
-		// dest.w = w;
-		// dest.h = h;
+	// 	dest.w = w;
+	// 	dest.h = h;
 	// }
 
 	dest.w = w;
