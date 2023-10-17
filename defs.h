@@ -10,8 +10,8 @@
 #define PLAYER_X_START  100
 #define PLAYER_Y_START  100
 
-#define PLAYER_WIDTH    75
-#define PLAYER_HEIGHT   75
+#define PLAYER_WIDTH    90
+#define PLAYER_HEIGHT   90
 #define SIDE_PLAYER 0
 
 /**************** Bullet Specs ****************/
@@ -21,8 +21,8 @@
 
 /**************** Enemy Specs ****************/
 #define ENEMY_BULLET_SPEED    8
-#define ENEMY_WIDTH     50
-#define ENEMY_HEIGHT    50
+#define ENEMY_WIDTH     30
+#define ENEMY_HEIGHT    30
 #define SIDE_ENEMY  1
 
 /**************** Graphics ****************/
