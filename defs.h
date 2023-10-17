@@ -10,8 +10,8 @@
 #define PLAYER_X_START  100
 #define PLAYER_Y_START  100
 
-#define PLAYER_WIDTH    90
-#define PLAYER_HEIGHT   90
+#define PLAYER_WIDTH    620 / 10
+#define PLAYER_HEIGHT   1190 / 10
 #define SIDE_PLAYER 0
 
 /**************** Bullet Specs ****************/
@@ -26,7 +26,7 @@
 #define SIDE_ENEMY  1
 
 /**************** Graphics ****************/
-#define PLAYER_IMAGE    "images/bear.png"
+#define PLAYER_IMAGE    "images/bear2.png"
 #define BULLET_IMAGE    "images/acorn.png"
 #define ENEMY_IMAGE     "images/rocket.jpg"
 
