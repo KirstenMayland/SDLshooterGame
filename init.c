@@ -33,4 +33,6 @@ void initSDL(App* app)
 	}
 
 	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
+
+	SDL_ShowCursor(0);
 }

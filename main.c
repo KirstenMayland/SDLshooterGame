@@ -36,9 +36,11 @@ int main(int argc, char *argv[])
 
 	remainder = 0;
 
+	SDL_Texture* background = loadTexture(BACKGROUND_IMAGE, app);
+
 	while (1)
 	{
-		prepareScene(app);
+		prepareScene(app, background);
 
 		doInput(app);
 

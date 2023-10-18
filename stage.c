@@ -9,12 +9,18 @@ SDL_Texture* bulletTexture;
 SDL_Texture* enemyTexture;
 SDL_Texture* enemyBulletTexture;
 SDL_Texture* playerTexture;
+SDL_Texture* explosionTexture;
 
 int enemySpawnTimer;
 int stageResetTimer;
 
+Leaf leaves[MAX_LEAVES];
+
+int leaves_c[3][3] = {{111, 29, 27}, {67, 40, 24}, {153, 88, 42}}; // red brown, rick dark brown, burnt orange
+
 /**************** local functions ****************/
-static void initPlayer();
+static void initPlayer(void);
+static void initLeaves(void);
 static void resetStage(void);
 static void clipPlayer(void);
 
@@ -23,15 +29,19 @@ static void doPlayer(void);
 static void doEnemies(void);
 static void doFighters(void);
 static void doBullets(void);
+static void doLeaves(void);
+
 static void fireBullet(void);
 static void fireEnemyBullet(Entity *e);
 static int bulletHitFighter(Entity *b);
 static void spawnEnemies(void);
+static void initLeaves(void);
 
 static void draw(void);
 static void drawPlayer(void);
 static void drawBullets(void);
 static void drawFighters(void);
+static void drawLeaves(void);
 
 
 
@@ -41,6 +51,8 @@ void initStage(App* app_param)
 
     Entity* fhead;
     Entity* bhead;
+	Explosion* ehead;
+    Debris* dhead;
 
 	app->delegate.logic = *logic;
 	app->delegate.draw = *draw;
@@ -53,12 +65,18 @@ void initStage(App* app_param)
 	stage->fighterTail = fhead;
 	stage->bulletTail = bhead; 
 
+	ehead = &stage->explosionHead;
+    dhead = &stage->debrisHead;
+	stage->explosionTail = ehead;
+	stage->debrisTail = dhead;
+
 	initPlayer();
 
 	bulletTexture = loadTexture(BULLET_IMAGE, app);
     enemyTexture = loadTexture(ENEMY_IMAGE, app);
     enemyBulletTexture = loadTexture(BULLET_IMAGE, app);
 	playerTexture = loadTexture(PLAYER_IMAGE, app);
+	explosionTexture = loadTexture(EXPLOSION_IMAGE, app);
 
 	enemySpawnTimer = 0;
 
@@ -67,7 +85,7 @@ void initStage(App* app_param)
 	resetStage();
 }
 
-static void initPlayer()
+static void initPlayer(void)
 {
     player = malloc(sizeof(Entity));
 	memset(player, 0, sizeof(Entity));
@@ -88,9 +106,24 @@ static void initPlayer()
     // return player;
 }
 
+static void initLeaves(void)
+{
+	int i;
+
+	for (i = 0 ; i < MAX_LEAVES ; i++)
+	{
+		leaves[i].x = rand() % SCREEN_WIDTH;
+		leaves[i].y = rand() % SCREEN_HEIGHT;
+		//leaves[i].speed = 1 + rand() % 8;
+		leaves[i].speed = 1;
+	}
+}
+
 static void resetStage(void)
 {
 	Entity *e;
+	Explosion *ex;
+	Debris *d;
 
 	while (stage->fighterHead.next)
 	{
@@ -106,25 +139,42 @@ static void resetStage(void)
 		free(e);
 	}
 
+	while (stage->explosionHead.next)
+	{
+		ex = stage->explosionHead.next;
+		stage->explosionHead.next = ex->next;
+		free(ex);
+	}
+
+	while (stage->debrisHead.next)
+	{
+		d = stage->debrisHead.next;
+		stage->debrisHead.next = d->next;
+		free(d);
+	}
+
 	stage = malloc(sizeof(Stage));
 	memset(stage, 0, sizeof(Stage));
 	stage->fighterTail = &stage->fighterHead;
 	stage->bulletTail = &stage->bulletHead;
 
 	initPlayer();
+	initLeaves();
 
 	enemySpawnTimer = 0;
 
-	stageResetTimer = FPS * 2;
+	stageResetTimer = FPS * 3; // used to be times 2
 }
 
 static void logic(void)
 {
+	doLeaves();
+
 	doPlayer();
 
 	doEnemies();
 
-    doFighters(); //
+    doFighters();
 
 	doBullets();
 
@@ -136,12 +186,12 @@ static void logic(void)
 	{
 		resetStage();
 	}
+
 }
 
 static void doPlayer(void)
 {
 	if (player != NULL && player->health == 0){
-		//free(player);
 		player = NULL;
 	}
 
@@ -309,7 +359,6 @@ static void doFighters(void)
 		e->x += e->dx;
 		e->y += e->dy;
 
-		//prev = &stage->fighterHead;
 
 		// if that fighter is not the player and 
 		if (e != player && (e->x < -e->w || e->health == 0))
@@ -357,6 +406,20 @@ static void spawnEnemies(void)
 	}
 }
 
+static void doLeaves(void)
+{
+	int i;
+
+	for (i = 0 ; i < MAX_LEAVES ; i++)
+	{
+		leaves[i].x -= leaves[i].speed;
+
+		if (leaves[i].x < 0)
+		{
+			leaves[i].x = SCREEN_WIDTH + leaves[i].x;
+		}
+	}
+}
 
 static void draw(void)
 {
@@ -365,6 +428,8 @@ static void draw(void)
 	drawBullets();
 
     drawFighters();
+
+	drawLeaves();
 }
 
 static void drawPlayer(void)
@@ -392,9 +457,23 @@ static void drawFighters(void)
 
 	for (e = stage->fighterHead.next ; e != NULL ; e = e->next)
 	{
-		if (e != player) { // added by me
+		if (e != player) {
 			blit(e->texture, e->x, e->y, ENEMY_WIDTH, ENEMY_HEIGHT, app);
 		}
+	}
+}
+
+static void drawLeaves(void)
+{
+	int i, l;
+
+	for (i = 0 ; i < MAX_LEAVES ; i++)
+	{
+		l = rand() % 3;
+
+		SDL_SetRenderDrawColor(app->renderer, leaves_c[l][0], leaves_c[l][1], leaves_c[l][2], 50);
+
+		SDL_RenderDrawLine(app->renderer, leaves[i].x, leaves[i].y, leaves[i].x + 2, leaves[i].y);
 	}
 }
 

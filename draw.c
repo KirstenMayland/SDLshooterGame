@@ -1,9 +1,17 @@
 #include "draw.h"
 
-void prepareScene(App* app)
+void prepareScene(App* app, SDL_Texture* background)
 {
-	SDL_SetRenderDrawColor(app->renderer, 187, 148, 87, 255);
-	SDL_RenderClear(app->renderer);
+	// SDL_SetRenderDrawColor(app->renderer, 255, 220, 167, 255);
+	// SDL_RenderClear(app->renderer);
+
+	SDL_Rect dest;
+	dest.x = 0;
+	dest.y = 0;
+	dest.w = SCREEN_WIDTH;
+	dest.h = SCREEN_HEIGHT;
+
+	SDL_RenderCopy(app->renderer, background, NULL, &dest);
 }
 
 void presentScene(App* app)
@@ -42,4 +50,16 @@ void blit(SDL_Texture *texture, int x, int y, int w, int h, App* app)
 	dest.h = h;
 
 	SDL_RenderCopy(app->renderer, texture, NULL, &dest);
+}
+
+void blitRect(SDL_Texture *texture, SDL_Rect *src, int x, int y, App* app)
+{
+	SDL_Rect dest;
+
+	dest.x = x;
+	dest.y = y;
+	dest.w = src->w;
+	dest.h = src->h;
+
+	SDL_RenderCopy(app->renderer, texture, src, &dest);
 }
