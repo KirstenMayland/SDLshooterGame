@@ -37,6 +37,9 @@ int main(int argc, char *argv[])
 	remainder = 0;
 
 	SDL_Texture* background = loadTexture(BACKGROUND_IMAGE, app);
+	playMusic(loadMusic(BACKGROUND_MUSIC), -1);
+
+	//initSounds();
 
 	while (1)
 	{
@@ -59,6 +62,13 @@ int main(int argc, char *argv[])
 void cleanup(void)
 {
 	// clean up resources
+	
+	// if (music != NULL)
+	// {
+	// 	Mix_HaltMusic();
+	// 	Mix_FreeMusic(music);
+	// 	music = NULL;
+	// }
 	// SDL_DestroyTexture(player.texture);
 	// free(stage);
     SDL_DestroyRenderer(app->renderer);

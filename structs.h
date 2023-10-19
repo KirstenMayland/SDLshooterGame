@@ -15,25 +15,6 @@ typedef struct {
 	int keyboard[MAX_KEYBOARD_KEYS];
 } App;
 
-typedef struct Explosion {
-	float x;
-	float y;
-	float dx;
-	float dy;
-	int r, g, b, a;
-	struct Explosion *next;
-} Explosion;
-
-typedef struct Debris {
-	float x;
-	float y;
-	float dx;
-	float dy;
-	SDL_Rect rect;
-	SDL_Texture *texture;
-	int life;
-	struct Debris *next;
-} Debris;
 
 typedef struct {
 	int x;
@@ -60,6 +41,4 @@ typedef struct Entity{
 typedef struct {
 	Entity fighterHead, *fighterTail;
 	Entity bulletHead, *bulletTail;
-	Explosion explosionHead, *explosionTail;
-	Debris debrisHead, *debrisTail;
 } Stage;

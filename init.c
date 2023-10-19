@@ -35,4 +35,17 @@ void initSDL(App* app)
 	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
 
 	SDL_ShowCursor(0);
+
+	// SDL_AudioSpec *spec;
+	// spec->channels = 2;
+	// spec->freq = 44100;
+	// spec->format = MIX_DEFAULT_FORMAT;
+
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1)
+	{
+		printf("Couldn't initialize SDL Mixer\n");
+		exit(1);
+	}
+
+	Mix_AllocateChannels(MAX_SND_CHANNELS);
 }

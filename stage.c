@@ -51,8 +51,6 @@ void initStage(App* app_param)
 
     Entity* fhead;
     Entity* bhead;
-	Explosion* ehead;
-    Debris* dhead;
 
 	app->delegate.logic = *logic;
 	app->delegate.draw = *draw;
@@ -64,11 +62,6 @@ void initStage(App* app_param)
     bhead = &stage->bulletHead;
 	stage->fighterTail = fhead;
 	stage->bulletTail = bhead; 
-
-	ehead = &stage->explosionHead;
-    dhead = &stage->debrisHead;
-	stage->explosionTail = ehead;
-	stage->debrisTail = dhead;
 
 	initPlayer();
 
@@ -122,8 +115,6 @@ static void initLeaves(void)
 static void resetStage(void)
 {
 	Entity *e;
-	Explosion *ex;
-	Debris *d;
 
 	while (stage->fighterHead.next)
 	{
@@ -139,20 +130,6 @@ static void resetStage(void)
 		free(e);
 	}
 
-	while (stage->explosionHead.next)
-	{
-		ex = stage->explosionHead.next;
-		stage->explosionHead.next = ex->next;
-		free(ex);
-	}
-
-	while (stage->debrisHead.next)
-	{
-		d = stage->debrisHead.next;
-		stage->debrisHead.next = d->next;
-		free(d);
-	}
-
 	stage = malloc(sizeof(Stage));
 	memset(stage, 0, sizeof(Stage));
 	stage->fighterTail = &stage->fighterHead;
@@ -163,7 +140,7 @@ static void resetStage(void)
 
 	enemySpawnTimer = 0;
 
-	stageResetTimer = FPS * 3; // used to be times 2
+	stageResetTimer = FPS * 2; // used to be times 2
 }
 
 static void logic(void)
@@ -228,6 +205,10 @@ static void doPlayer(void)
         {
             fireBullet();
         }
+		if (app->keyboard[SDL_SCANCODE_LCTRL] && player->reload <= 0)
+		{
+			playSound(SND_PLAYER_FIRE, CH_PLAYER);
+		}
 
         player->x += player->dx;
         player->y += player->dy;
@@ -243,6 +224,7 @@ static void doEnemies(void)
 		if (e != player && player != NULL && --e->reload <= 0)
 		{
 			fireEnemyBullet(e);
+			playSound(SND_ENEMY_FIRE, CH_ENEMY_FIRE);
 		}
 	}
 }
@@ -339,6 +321,15 @@ static int bulletHitFighter(Entity *b)
 		{
 			b->health = 0;
 			e->health = 0;
+
+			if (e == player)
+			{
+				playSound(SND_PLAYER_DIE, CH_PLAYER);
+			}
+			else
+			{
+				playSound(SND_ENEMY_DIE, CH_ANY);
+			}
 
 			return 1;
 		}

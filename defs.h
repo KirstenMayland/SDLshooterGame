@@ -38,3 +38,25 @@
 #define EXPLOSION_IMAGE "images/leaves.png"
 #define BACKGROUND_IMAGE "images/background.png"
 
+/**************** Sound ****************/
+#define MAX_SND_CHANNELS 8
+
+#define BACKGROUND_MUSIC "audio/InTheDeepWoods_StardewValleyOST.wav"
+
+#pragma once
+enum
+{
+	CH_ANY = -1,
+	CH_PLAYER,
+	CH_ENEMY_FIRE
+};
+
+#pragma once
+enum
+{
+	SND_PLAYER_FIRE,
+	SND_ENEMY_FIRE,
+	SND_PLAYER_DIE,
+	SND_ENEMY_DIE,
+	SND_MAX
+};
