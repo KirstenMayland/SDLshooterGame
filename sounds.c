@@ -14,10 +14,10 @@ void initSounds(void)
 
 static void loadSounds(void)
 {
-	sounds[SND_PLAYER_FIRE] = Mix_LoadWAV("sound/334227__jradcoolness__laser.ogg");
+	sounds[SND_PLAYER_FIRE] = Mix_LoadWAV("audio/player_throw.wav");
 	sounds[SND_ENEMY_FIRE] = Mix_LoadWAV("sound/196914__dpoggioli__laser-gun.ogg");
 	sounds[SND_PLAYER_DIE] = Mix_LoadWAV("sound/245372__quaker540__hq-explosion.ogg");
-	sounds[SND_ENEMY_DIE] = Mix_LoadWAV("sound/10 Guage Shotgun-SoundBible.com-74120584.ogg");
+	sounds[SND_ENEMY_DIE] = Mix_LoadWAV("audio/enemy_death.wav");
 }
 
 Mix_Music* loadMusic(char *filename)

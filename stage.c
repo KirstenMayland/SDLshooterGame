@@ -19,30 +19,30 @@ Leaf leaves[MAX_LEAVES];
 int leaves_c[3][3] = {{111, 29, 27}, {67, 40, 24}, {153, 88, 42}}; // red brown, rick dark brown, burnt orange
 
 /**************** local functions ****************/
-static void initPlayer(void);
-static void initLeaves(void);
 static void resetStage(void);
-static void clipPlayer(void);
 
 static void logic(void);
+static void initPlayer(void);
 static void doPlayer(void);
-static void doEnemies(void);
+static void clipPlayer(void);
+
 static void doFighters(void);
-static void doBullets(void);
+static void doEnemies(void);
+static void spawnEnemies(void);
+
+static void initLeaves(void);
 static void doLeaves(void);
 
+static void doBullets(void);
 static void fireBullet(void);
 static void fireEnemyBullet(Entity *e);
 static int bulletHitFighter(Entity *b);
-static void spawnEnemies(void);
-static void initLeaves(void);
 
 static void draw(void);
 static void drawPlayer(void);
 static void drawBullets(void);
 static void drawFighters(void);
 static void drawLeaves(void);
-
 
 
 void initStage(App* app_param)
