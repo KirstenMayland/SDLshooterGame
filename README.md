@@ -24,6 +24,11 @@ When running:
 Use the `Arrow Keys` to move, press `Left Ctrl` to shoot acorns
 
 
+## Graphics
+
+Chipmunk and background drawn by me, acorns and bear obtained from Google.
+
+
 ## Files
 
 * `Makefile` - compilation procedure
