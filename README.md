@@ -1,5 +1,7 @@
 # sdl2Dshooter - "ForagerDefense"
 
+## ----------NOTE: Unfinished, abandoned when I started exploring Godot---------------
+
 ## Team Members (team of 1)
 - Kirsten Mayland (@KirstenMayland)
 
