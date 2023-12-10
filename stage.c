@@ -68,7 +68,6 @@ void initStage(App* app_param)
 
 static void initPlayer(void)
 {
-	//TODO: player malloc
     player = malloc(sizeof(Entity));
 	memset(player, 0, sizeof(Entity));
 	stage->fighterTail->next = player;
@@ -327,13 +326,17 @@ static void doBullets(void)
 		b->x += b->dx;
 		b->y += b->dy;
 
+		// if bullet hits a fighter or passes out of bounds
 		if (bulletHitFighter(b) || b->x < -b->w || b->y < -b->h || b->x > SCREEN_WIDTH || b->y > SCREEN_HEIGHT)
 		{
+			// if bullet is the last in the circular linked list,
 			if (b == stage->bulletTail)
 			{
+				// the prev is the last one in the list
 				stage->bulletTail = prev;
 			}
 
+			// then remove b from the list and relink it accordingly 
 			prev->next = b->next;
 			free(b);
 			b = prev;

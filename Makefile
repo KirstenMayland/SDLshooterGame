@@ -49,7 +49,7 @@ clean:
 	rm -f $(EXEC) $(OBJS)
 
 valgrind: $(EXEC)
-	valgrind $(VFLAGS) ./$(EXEC)
+	valgrind $(VFLAGS) --track-origins=yes ./$(EXEC)
 
 set:
 	make clean

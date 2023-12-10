@@ -1,11 +1,11 @@
 #include "main.h"
 
-//TODO: 
+// TODO: 
 // include wasd
 // increase directions bullets can be shot from
 // have acorns be shot from the bear's paws
-// free stage and enemies
-// prevent bear from leaving screen
+// fine tune bear where bear can go
+// add bullet, death, and startup sounds
 
 // enemies move on y axis? (prevent them from leaving top and bottom of screen)
 // change spawn rate
@@ -13,6 +13,8 @@
 /**************** file-local global variables ****************/
 App* app;
 Stage* stage;
+Mix_Music* music;
+SDL_Texture* background;
 
 /**************** local functions ****************/
 void cleanup(void);
@@ -23,22 +25,21 @@ int main(int argc, char *argv[])
 	long then;
 	float remainder;
 
-	// TODO: app malloc
 	app = malloc(sizeof(App));
 	memset(app, 0, sizeof(App));
 
 	initSDL(app);
+	initStage(app);
 
 	atexit(cleanup);
 
-	initStage(app);
-
 	then = SDL_GetTicks();
-
 	remainder = 0;
 
-	SDL_Texture* background = loadTexture(BACKGROUND_IMAGE, app);
-	playMusic(loadMusic(BACKGROUND_MUSIC), -1);
+	background = loadTexture(BACKGROUND_IMAGE, app);
+
+	music = loadMusic(BACKGROUND_MUSIC);
+	playMusic(music, -1);
 
 	//initSounds();
 
@@ -62,20 +63,26 @@ int main(int argc, char *argv[])
 
 void cleanup(void)
 {
-	// clean up resources
-	
-	// if (music != NULL)
-	// {
-	// 	Mix_HaltMusic();
-	// 	Mix_FreeMusic(music);
-	// 	music = NULL;
-	// }
+	// free audio
+	if (music != NULL)
+	{
+		Mix_FreeMusic(music);
+	}
+	Mix_CloseAudio();
+	Mix_Quit();
 
-	// reset stage (frees fighters & bullets)
+	// free gameplay
 	cleanupStage(returnStage());
-    SDL_DestroyRenderer(app->renderer);
-    SDL_DestroyWindow(app->window);
-	free(app);
+	SDL_DestroyTexture(background);
+	if (app != NULL) {
+		if (app->renderer != NULL){
+			SDL_DestroyRenderer(app->renderer);
+		}
+		if (app->window != NULL){
+			SDL_DestroyWindow(app->window);
+		}
+		free(app);
+	}
     SDL_Quit();
 }
 

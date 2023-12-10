@@ -2,12 +2,10 @@
 
 ## ----------NOTE: Unfinished, abandoned when I started exploring Godot---------------
 
-## Team Members (team of 1)
-- Kirsten Mayland (@KirstenMayland)
 
-## shooter
+## ForagerDefense
 
-*shooter* is a program that runs a 2D 80s style, autumn-coded videogame using C and SDL (Simple DirectMedia Layer) libraries.
+ForagerDefense is a program that runs a 2D 80s style, autumn-coded videogame using C and SDL (Simple DirectMedia Layer) libraries.
 
 Video of playthrough documented here: [ForagerDefensePlaythrough](video/ForagerDefense.mp4).
 
@@ -23,12 +21,14 @@ $ ./shooter
 
 When running:
 
-Use the `Arrow Keys` to move, press `Left Ctrl` to shoot acorns
+Use the `Arrow Keys` to move, and press `Left Ctrl` to shoot acorns
 
 
-## Graphics
+## Graphics and Audio Credit
 
-Chipmunk and background drawn by me, acorns and bear obtained from Google.
+Chipmunk and background drawn by me. The acorns and bear were obtained from Google images.
+
+The music in the background is "In The Deep Woods" from the Stardew Valley OST by ConcernedApe aka Eric Barone.
 
 
 ## Files
@@ -53,6 +53,38 @@ Chipmunk and background drawn by me, acorns and bear obtained from Google.
 * `util.c` - the implementation of functions related to needed math
 * `util.h` - the interface of the util module
 
+## Valgrind and Memory Errors/Leaks
+After many hours trying to get rid of memory errors and leaks, I discovered that the SDL library itself was responsible for most of the memory errors (which is in part why I'm stepping away from it for Godot). I don't know if the apparent errors/leaks are the fault of Valgrind or
+SDL2 or a combination, but at this point in time, it at least does not appear to be me.
+
+When you compile and run the program below:
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <SDL2/SDL.h>
+
+int main(){
+	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Quit();
+	return 0;
+}
+```
+Valgrind returns with:
+```
+==10260== LEAK SUMMARY:
+==10260==    definitely lost: 21,610 bytes in 14 blocks
+==10260==    indirectly lost: 113,752 bytes in 19 blocks
+==10260==      possibly lost: 5,084,230 bytes in 784 blocks
+==10260==    still reachable: 497,672 bytes in 5,277 blocks
+==10260==                       of which reachable via heuristic:
+==10260==                         newarray           : 418,080 bytes in 5 blocks
+==10260==         suppressed: 0 bytes in 0 blocks
+==10260== 
+==10260== For lists of detected and suppressed errors, rerun with: -s
+==10260== ERROR SUMMARY: 3172 errors from 1675 contexts (suppressed: 20 from 4)
+```
+
+
 ## Compilation
 To build, run `make`
 
@@ -60,10 +92,10 @@ To clean up, run `make clean`
 
 To clean and then build, run `make set`
 
-To valgrind, run `make valgrind`
+To use valgrind, run `make valgrind`
 
 
-## Credit
+## Credit pt.2
 Followed this tutorial bc new to game dev: https://www.parallelrealities.co.uk/tutorials/#shooter
 
 It was a great tutorial bc it gave me mostly correct code and then I need to bring it all the way to completion, forcing me to actually understand it (got better at makefiles, typedef structs, general SDL, refresher on pointers, function pointers) All in all, so many hours of debugging, trying to conceptualize it and get it to work.

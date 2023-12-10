@@ -22,25 +22,16 @@ static void loadSounds(void)
 
 Mix_Music* loadMusic(char *filename)
 {
-	// Mix_Music* m;
-	// if (m != NULL)
-	// {
-	// 	Mix_HaltMusic();
-	// 	Mix_FreeMusic(m);
-	// 	m = NULL;
-	// }
-
 	return Mix_LoadMUS(filename);
 	
 }
 
 void playMusic(Mix_Music* music, int loop)
 {
-	//Mix_PlayMusic(music, (loop) ? -1 : 0);
 	if (music == NULL) {
 		printf("null2\n");
 	}
-	int error = Mix_FadeInMusicPos(music, loop, 0.1, 0.0);
+	int error = Mix_FadeInMusicPos(music, loop, 1, 0.0);
 	if (error == -1) {
 		printf("error\n");
 	}
