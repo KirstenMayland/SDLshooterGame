@@ -5,3 +5,5 @@
 
 /*init*/
 void initStage(App* app_param);
+void cleanupStage(Stage* stage);
+Stage* returnStage();

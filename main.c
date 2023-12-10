@@ -12,7 +12,7 @@
 
 /**************** file-local global variables ****************/
 App* app;
-// Stage stage;
+Stage* stage;
 
 /**************** local functions ****************/
 void cleanup(void);
@@ -23,6 +23,7 @@ int main(int argc, char *argv[])
 	long then;
 	float remainder;
 
+	// TODO: app malloc
 	app = malloc(sizeof(App));
 	memset(app, 0, sizeof(App));
 
@@ -69,14 +70,13 @@ void cleanup(void)
 	// 	Mix_FreeMusic(music);
 	// 	music = NULL;
 	// }
-	// SDL_DestroyTexture(player.texture);
-	// free(stage);
+
+	// reset stage (frees fighters & bullets)
+	cleanupStage(returnStage());
     SDL_DestroyRenderer(app->renderer);
     SDL_DestroyWindow(app->window);
 	free(app);
     SDL_Quit();
-
-	// delete malloced player
 }
 
 static void capFrameRate(long *then, float *remainder)

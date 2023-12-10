@@ -49,21 +49,8 @@ void initStage(App* app_param)
 {
     app = app_param;
 
-    Entity* fhead;
-    Entity* bhead;
-
 	app->delegate.logic = *logic;
 	app->delegate.draw = *draw;
-
-    stage = malloc(sizeof(Stage));
-    memset(stage, 0, sizeof(Stage));
-
-    fhead = &stage->fighterHead;
-    bhead = &stage->bulletHead;
-	stage->fighterTail = fhead;
-	stage->bulletTail = bhead; 
-
-	initPlayer();
 
 	bulletTexture = loadTexture(BULLET_IMAGE, app);
     enemyTexture = loadTexture(ENEMY_IMAGE, app);
@@ -75,11 +62,13 @@ void initStage(App* app_param)
 
     // return stage, player;
 
+	// essentially initStage()
 	resetStage();
 }
 
 static void initPlayer(void)
 {
+	//TODO: player malloc
     player = malloc(sizeof(Entity));
 	memset(player, 0, sizeof(Entity));
 	stage->fighterTail->next = player;
@@ -116,18 +105,24 @@ static void resetStage(void)
 {
 	Entity *e;
 
-	while (stage->fighterHead.next)
-	{
-		e = stage->fighterHead.next;
-		stage->fighterHead.next = e->next;
-		free(e);
-	}
+	if (stage != NULL) {
+		// frees all fighters
+		while (stage->fighterHead.next)
+		{
+			e = stage->fighterHead.next;
+			stage->fighterHead.next = e->next;
+			free(e);
+		}
 
-	while (stage->bulletHead.next)
-	{
-		e = stage->bulletHead.next;
-		stage->bulletHead.next = e->next;
-		free(e);
+		// frees all bullets
+		while (stage->bulletHead.next)
+		{
+			e = stage->bulletHead.next;
+			stage->bulletHead.next = e->next;
+			free(e);
+		}
+		// stage free
+		free(stage);
 	}
 
 	stage = malloc(sizeof(Stage));
@@ -141,6 +136,41 @@ static void resetStage(void)
 	enemySpawnTimer = 0;
 
 	stageResetTimer = FPS * 2; // used to be times 2
+}
+
+void cleanupStage(Stage* stage) {
+	Entity *e;
+
+	if (stage != NULL) {
+		// frees all fighters
+		while (stage->fighterHead.next)
+		{
+			e = stage->fighterHead.next;
+			stage->fighterHead.next = e->next;
+			free(e);
+		}
+
+		// frees all bullets
+		while (stage->bulletHead.next)
+		{
+			e = stage->bulletHead.next;
+			stage->bulletHead.next = e->next;
+			free(e);
+		}
+		// stage free
+		free(stage);
+	}
+
+	// clean up textures
+	SDL_DestroyTexture(bulletTexture);
+	SDL_DestroyTexture(enemyTexture);
+	SDL_DestroyTexture(enemyBulletTexture);
+	SDL_DestroyTexture(playerTexture);
+	SDL_DestroyTexture(explosionTexture);
+}
+
+Stage* returnStage() {
+	return stage;
 }
 
 static void logic(void)
@@ -233,6 +263,7 @@ static void fireEnemyBullet(Entity *e)
 {
 	Entity *bullet;
 
+	// TODO: bullet malloc
 	bullet = malloc(sizeof(Entity));
 	memset(bullet, 0, sizeof(Entity));
 	stage->bulletTail->next = bullet;
@@ -263,6 +294,7 @@ static void fireBullet(void)
 {
 	Entity *bullet;
 
+	//TODO: bullet malloc
 	bullet = malloc(sizeof(Entity));
 	memset(bullet, 0, sizeof(Entity));
 	stage->bulletTail->next = bullet;
@@ -374,6 +406,7 @@ static void spawnEnemies(void)
 
 	if (--enemySpawnTimer <= 0)
 	{
+		//TODO: enemy malloc
 		enemy = malloc(sizeof(Entity));
 		memset(enemy, 0, sizeof(Entity));
 		stage->fighterTail->next = enemy;
