@@ -1,6 +1,6 @@
 # sdl2Dshooter - "ForagerDefense"
 
-## --------NOTE: Abandoned when I transitioned to working in Godot--------
+## --------NOTE: Further development paused when I transitioned to working in Godot--------
 
 
 ## ForagerDefense
